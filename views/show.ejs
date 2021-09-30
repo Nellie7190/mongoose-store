@@ -1,39 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mongoose</title>
 </head>
-<body>
 
+<body>
+    <!-- BACK TO INDEX -->
     <nav>
         <a href="/products">Back to Products Index</a>
     </nav>
-    <h1><%=product.name %></h1>
+    <h1>
+        <%=product.name%>
+    </h1>
     <br />
-
-    Descriptions: <%= product.description %> 
-    Image: <img src="<%= product.img%>" alt="">
-    Price: <%= product.price%>
-    Quantity: <% product.qty%>
-
-    <nav>
-        <a href="/products/<%= %>edit">Edit Product</a>
-    </nav>
+    <!-- DELETE BUTTON-->
+    <form action="/products/<%= product.id%>?_method=DELETE" method="POST">
+        <input type="submit" value=DELETE>
+    </form>
     <br>
+    <!-- BODY  -->
+    <%= product.description %> <br>
+        <img src="<%= product.img%>" alt="<%=product.name%>"><br>
+        Price: <%= product.price%> <br>
 
-    <nav>
-        <a href="/products/<%= %>?_method=DELETE">DELETE</a>
-    </nav>
 
-    <!-- <input type="submit" >  OPTIONS-->
-    <!-- When attr button.target = 'ON', subtract product.qty by 1 -->
-    <!-- if else statement in update route and redirect it back to itself -->
-    <!-- if else statement attached to buy button to update qty on page -->
+
+            <br>
+            <br>
+            <!-- EDIT BUTTON-->
+            <form action="/products/<%= product._id%>/edit" method="PUT">
+                <input type="submit" value=EDIT>
+            </form> <br>
+
+
+
+            Quantity: <%= product.qty%>
+                <form action="/products/<%=product._id%>?_method=PUT" method="POST">
+                        <% if(product.qty !=0 ) { %>
+                                <!-- BUY BUTTON -->
+                                <input type="hidden" name="qty" value="<%=( parseInt( product.qty )-1).toString() %>">
+                                <input id="buy" type="submit"  value="buy">
+                                <%} else {%>
+                                <p>OUT OF STOCK</p>
+                                <input type="off" type="submit" name="qty" value="Buy" disabled="true">
+                                <%}%>
+                </form>
+
+
+
+
 
 
 
 </body>
+
 </html>

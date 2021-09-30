@@ -1,17 +1,19 @@
+//Dependencies
 const express = require('express');
+const mongoose = require('mongoose');
+const methodOverride = require('method-override');
 const app = express();
 require('dotenv').config();
-const Product = require('./models/products')
-PORT = 3000;
 
-// Dependencies
-const mongoose = require('mongoose');
+//Routes / Controllers
+const productsController = require('./controllers/productC');
+app.use('/products', productsController);
 
 
 // Database Connection
 mongoose.connect(process.env.DATABASE_URL, {
-	useNewUrlParser: true,
-	useUnifiedTopology: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 });
 
 // Database Connection Error/Success
@@ -24,51 +26,12 @@ db.on('disconnected', () => console.log('mongo disconnected'));
 const Log = require('./models/products')
 
 //MIDDLEWARE
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: false }));
+app.use(methodOverride('_method'));
 
-
-/////ROUTES
-//INDEX
-app.get('/products', (req, res) => {
-    Product.find({}, (error, allProducts) => {
-        res.render('index.ejs', {
-            products: allProducts,
-        })
-    })
-});
-
-//NEW
-app.get('/products/new', (req, res) => {
-    res.render('new.ejs');
-});
-
-//DELETE
-
-
-//UPDATE
-
-
-//CREATE
-app.post('/products', (req, res) => {
-    Product.create(req.body, (error, createdProduct) => {
-        res.redirect('/products')
-    })
-    // res.render('show.ejs');
-});
-
-//EDIT
-
-
-//SHOW
-app.get('/products/:id', (req, res) => {
-    Product.findById(req.params.id, (err, foundProduct) => {
-        res.render('show.ejs', {
-            product: foundProduct
-        });
-    })
-});
 
 //LISTENER
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`listening on port: ${PORT}`);
 });
